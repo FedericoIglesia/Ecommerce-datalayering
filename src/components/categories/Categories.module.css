@@ -2,7 +2,6 @@
   height: 80px;
   margin: 0 auto;
   left: 0;
-  position: fixed;
   top: 0;
   width: 100%;
   overflow-x: hidden;
@@ -24,13 +23,26 @@
   margin-left: 50px;
 }
 
-.list li {
+/* .selected {
+  background-color: red;
+} */
+
+.list button {
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  text-decoration: none;
+  border: none;
+  background-color: transparent;
   margin: 0 16px;
-  padding-bottom: 28px;
+  padding-bottom: 20px;
   border-bottom: 2px solid #fff;
+  transition: all 0.5s;
 }
-.list li:hover {
+.list button:hover {
   cursor: pointer;
+  border-bottom: 2px solid #5ece7b;
+  color: #5ece7b;
 }
 .back {
   height: 28px;
@@ -47,9 +59,27 @@
   margin-bottom: 30px;
 }
 
+.products {
+  margin-top: 12rem;
+}
+
 .products h2 {
   position: absolute;
   top: 160px;
   font-weight: 400;
   margin: 0 0 90px 117px;
+}
+
+.products-container {
+  margin-right: 100px;
+  display: grid;
+  grid-template-columns: 20% 20% 20%;
+  justify-content: center;
+  column-gap: 150px;
+  row-gap: 100px;
+}
+
+.img {
+  height: 316px;
+  width: 308px;
 }

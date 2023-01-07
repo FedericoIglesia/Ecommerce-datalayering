@@ -1,14 +1,18 @@
-import { useState } from "react";
 import Categories from "./components/categories/Categories";
+import Cart from "./components/cart/Cart";
+import PDP from "./components/pdp/PDP";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="App">
-      <Categories />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route exact path="/" element={<Categories />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/pdp" element={<PDP />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
