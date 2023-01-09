@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import Nav from "../nav/Nav";
-import CartOverlay from "../cart overlay/CartOverlay";
-import Currency from "../currency/Currency";
 import Cards from "../cards/Cards";
 import c from "./Categories.module.css";
 
@@ -13,13 +11,12 @@ import {
   getProductDetail,
 } from "../../redux/actions";
 import { Link } from "react-router-dom";
+import { current } from "@reduxjs/toolkit";
 
 export class Categories extends Component {
   constructor() {
     super();
-    // this.state = {
-    //   selected: "women",
-    // };
+
     this.handleProductDetail = this.handleProductDetail.bind(this);
   }
 
@@ -27,22 +24,9 @@ export class Categories extends Component {
     this.props.getAllProducts();
   }
 
-  // handleCategory = (e) => {
-  //   this.props.filterByCategory(e.target.value);
-  //   e.target.value === "men"
-  //     ? this.setState(() => {
-  //         return { selected: "men" };
-  //       })
-  //     : e.target.value === "kids"
-  //     ? this.setState(() => {
-  //         return { selected: "kids" };
-  //       })
-  //     : this.setState(() => {
-  //         return { selected: "women" };
-  //       });
-  // };
-
   handleProductDetail(e) {
+    localStorage.setItem("currentItem", JSON.stringify(e));
+
     this.props.getProductDetail(e.id);
   }
 
@@ -50,50 +34,6 @@ export class Categories extends Component {
     return (
       <>
         <Nav />
-        {/* <nav className={c.nav}>
-          <div className={c["nav-container"]}>
-            <ul className={c.list}>
-              <button
-                onClick={this.handleCategory}
-                value="women"
-                style={
-                  this.state.selected == "women"
-                    ? { borderBottom: "2px solid #5ece7b", color: "#5ece7b" }
-                    : {}
-                }
-              >
-                WOMEN
-              </button>
-              <button
-                onClick={this.handleCategory}
-                value="men"
-                style={
-                  this.state.selected == "men"
-                    ? { borderBottom: "2px solid #5ece7b", color: "#5ece7b" }
-                    : {}
-                }
-              >
-                MEN
-              </button>
-              <button
-                onClick={this.handleCategory}
-                value="kids"
-                style={
-                  this.state.selected == "kids"
-                    ? { borderBottom: "2px solid #5ece7b", color: "#5ece7b" }
-                    : {}
-                }
-              >
-                KIDS
-              </button>
-            </ul>
-            <img src={back} className={c.back} />
-            <ul className={c["icons-list"]}>
-              <Currency />
-              <CartOverlay />
-            </ul>
-          </div>
-        </nav> */}
         <section className={c.products}>
           <h2>
             {this.props.initialProducts.length

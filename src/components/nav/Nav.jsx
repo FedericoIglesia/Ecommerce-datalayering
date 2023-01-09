@@ -5,6 +5,7 @@ import c from "../categories/Categories.module.css";
 import { filterByCategory } from "../../redux/actions";
 import { connect } from "react-redux";
 import back from "../../assets/back-icon.png";
+import { Link } from "react-router-dom";
 
 export class Nav extends Component {
   constructor() {
@@ -35,39 +36,45 @@ export class Nav extends Component {
         <nav className={c.nav}>
           <div className={c["nav-container"]}>
             <ul className={c.list}>
-              <button
-                onClick={this.handleCategory}
-                value="women"
-                style={
-                  this.state.selected == "women"
-                    ? { borderBottom: "2px solid #5ece7b", color: "#5ece7b" }
-                    : {}
-                }
-              >
-                WOMEN
-              </button>
-              <button
-                onClick={this.handleCategory}
-                value="men"
-                style={
-                  this.state.selected == "men"
-                    ? { borderBottom: "2px solid #5ece7b", color: "#5ece7b" }
-                    : {}
-                }
-              >
-                MEN
-              </button>
-              <button
-                onClick={this.handleCategory}
-                value="kids"
-                style={
-                  this.state.selected == "kids"
-                    ? { borderBottom: "2px solid #5ece7b", color: "#5ece7b" }
-                    : {}
-                }
-              >
-                KIDS
-              </button>
+              <Link to="/">
+                <button
+                  onClick={this.handleCategory}
+                  value="women"
+                  style={
+                    this.state.selected == "women"
+                      ? { borderBottom: "2px solid #5ece7b", color: "#5ece7b" }
+                      : {}
+                  }
+                >
+                  WOMEN
+                </button>
+              </Link>
+              <Link to="/">
+                <button
+                  onClick={this.handleCategory}
+                  value="men"
+                  style={
+                    this.state.selected == "men"
+                      ? { borderBottom: "2px solid #5ece7b", color: "#5ece7b" }
+                      : {}
+                  }
+                >
+                  MEN
+                </button>
+              </Link>
+              <Link to="/">
+                <button
+                  onClick={this.handleCategory}
+                  value="kids"
+                  style={
+                    this.state.selected == "kids"
+                      ? { borderBottom: "2px solid #5ece7b", color: "#5ece7b" }
+                      : {}
+                  }
+                >
+                  KIDS
+                </button>
+              </Link>
             </ul>
             <img src={back} className={c.back} />
             <ul className={c["icons-list"]}>

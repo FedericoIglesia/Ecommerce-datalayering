@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import c from "./Cart.module.css";
+import Nav from "../nav/Nav";
 export class Cart extends Component {
   constructor() {
     super();
