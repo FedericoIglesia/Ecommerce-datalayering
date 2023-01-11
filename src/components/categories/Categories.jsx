@@ -33,8 +33,10 @@ export class Categories extends Component {
   render() {
     return (
       <>
-        <Nav />
-        <section className={c.products}>
+        <section
+          className={c.products}
+          style={this.props.flag ? { background: "grey" } : {}}
+        >
           <h2>
             {this.props.initialProducts.length
               ? this.props.initialProducts[0].category[0].toUpperCase() +
@@ -75,6 +77,7 @@ export class Categories extends Component {
 export const mapStateToProps = (props) => {
   return {
     initialProducts: props.initialProducts,
+    flag: props.flag,
   };
 };
 

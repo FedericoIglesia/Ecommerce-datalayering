@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { addToCart, getProductDetail } from "../../redux/actions";
+import {
+  addToCart,
+  getProductDetail,
+  getAllProducts,
+} from "../../redux/actions";
 import p from "./PDP.module.css";
 import Nav from "../nav/Nav";
 
@@ -14,6 +18,7 @@ export class PDP extends Component {
   }
 
   componentDidMount() {
+    this.props.getAllProducts();
     let a = JSON.parse(localStorage.getItem("currentItem"));
     if (a)
       this.setState(() => {
@@ -21,11 +26,14 @@ export class PDP extends Component {
       });
   }
 
+  handleAddToCart = () => {
+    this.props.addToCart(this.state.storageItem.id);
+    localStorage.setItem("cart", JSON.stringify(this.state.storageItem));
+  };
+
   render() {
-    console.log(this.state.storageItem.img);
     return (
       <>
-        <Nav />
         <div className={p.container}>
           <div className={p["small-img--container"]}>
             <img
@@ -84,7 +92,12 @@ export class PDP extends Component {
                 {this.props.currentDetail.price || this.state.storageItem.price}
               </strong>
             </p>
-            <button className={p["addCart-btn"]}>ADD TO CART</button>
+            <button
+              className={p["addCart-btn"]}
+              onClick={() => this.handleAddToCart()}
+            >
+              ADD TO CART
+            </button>
             <p>
               {this.props.currentDetail.description ||
                 this.state.storageItem.description}
@@ -99,12 +112,14 @@ export class PDP extends Component {
 export const mapStateToProps = (props) => {
   return {
     currentDetail: props.currentDetail,
+    flag: props.flag,
   };
 };
 
 export const mapDispatchToProps = {
   addToCart,
   getProductDetail,
+  getAllProducts,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PDP);

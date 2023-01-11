@@ -67,7 +67,7 @@
   position: absolute;
   top: 160px;
   font-weight: 400;
-  margin: 0 0 90px 117px;
+  margin: 0 0 70px 117px;
 }
 
 .products-container {
@@ -76,7 +76,7 @@
   grid-template-columns: 20% 20% 20%;
   justify-content: center;
   column-gap: 150px;
-  row-gap: 100px;
+  row-gap: 50px;
 }
 
 .img {

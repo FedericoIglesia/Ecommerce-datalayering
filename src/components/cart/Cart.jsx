@@ -19,8 +19,8 @@ export class Cart extends Component {
         {this.props.cartItems.length > 0 ? (
           this.props.cartItems.map((c) => {
             <div>
-              <h4></h4>
-              <p></p>
+              <h4>{this.props.cartItems.productName}</h4>
+              <p>{this.props.cartItems.price}</p>
               <p></p>
               <div></div>
               <div></div>

@@ -3,7 +3,9 @@ export const FILTER_BY_CATEGORY = "FILTER_BY_CATEGORY";
 export const SELECTED_CATEGORY = "SELECTED_CATEGORY";
 export const ADD_TO_CART = "ADD_TO_CART";
 export const GET_CART_ITEMS = "GET_CART_ITEMS";
+export const REMOVE_CART_ITEM = "REMOVE_CART_ITEM";
 export const GET_PRODUCT_DETAIL = "GET_PRODUCT_DETAIL";
+export const GREY_FLAG = "GREY_FLAG";
 
 export const getAllProducts = () => {
   return async function (dispatch) {
@@ -46,9 +48,23 @@ export const getCartItems = () => {
   };
 };
 
+export const removeItem = (payload) => {
+  return {
+    type: REMOVE_CART_ITEM,
+    payload,
+  };
+};
+
 export const getProductDetail = (payload) => {
   return {
     type: GET_PRODUCT_DETAIL,
+    payload,
+  };
+};
+
+export const grayedBody = (payload) => {
+  return {
+    type: GREY_FLAG,
     payload,
   };
 };
