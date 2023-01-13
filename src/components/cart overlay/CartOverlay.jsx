@@ -3,7 +3,7 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import c from "../cart/Cart.module.css";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { removeItem } from "../../redux/actions";
+import { removeItem, savePrice, saveQty } from "../../redux/actions";
 
 export class CartOverlay extends Component {
   constructor() {
@@ -11,7 +11,7 @@ export class CartOverlay extends Component {
     this.state = {
       displayCart: false,
       // cartItems: JSON.parse(localStorage.getItem("cart")) || [],
-      qty: [1, 1, 1, 1, 1, 1],
+      qty: [1],
       totalPrice: 0,
     };
   }
@@ -39,7 +39,9 @@ export class CartOverlay extends Component {
   handleSum = (idx) => {
     let newArr = [...this.state.qty];
     newArr[idx] = newArr[idx] + 1;
+    console.log(newArr[idx]);
     // newArr.push(1);
+
     this.setState((prev) => {
       return {
         qty: [...newArr],
@@ -49,8 +51,8 @@ export class CartOverlay extends Component {
   };
 
   handleSub = (idx) => {
+    console.log(idx);
     let newArr = [...this.state.qty];
-    console.log(newArr[idx]);
     if (newArr[idx] > 1) {
       newArr[idx] = newArr[idx] - 1;
       this.setState((prev) => {
@@ -64,10 +66,22 @@ export class CartOverlay extends Component {
     }
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.qty !== this.state.qty) {
+      this.props.saveQty(this.state.qty);
+    }
+    if (prevState.totalPrice !== this.state.price) {
+      this.props.savePrice(this.state.totalPrice);
+    }
+  }
+
+  // handleCartInfo = () => {
+  //   this.props.savePrice(this.state.totalPrice);
+  //   this.props.saveQty(this.state.qty);
+  // };
+
   render() {
     // let a = JSON.parse(localStorage.getItem("cart"));
-
-    console.log(this.state.totalPrice);
     return (
       <div>
         <AiOutlineShoppingCart className={c.icon} onClick={this.toggle} />
@@ -84,11 +98,10 @@ export class CartOverlay extends Component {
             {this.props.cartItems.map((item, idx) => {
               return (
                 <div className={c["items-container"]} key={item.id}>
-                  {console.log(item)}
                   <div className={c["details-container"]}>
                     <h3 style={{ fontWeight: "400" }}>{item.productName}</h3>
                     <h3 style={{ marginTop: "-8px" }}>
-                      ${item.price * this.state.qty[idx]}
+                      ${item.price * this.props.qty[idx]}
                     </h3>
                     <p style={{ marginTop: "-10px" }}>Size:</p>
                     <div className={c["size-details"]}>
@@ -129,7 +142,7 @@ export class CartOverlay extends Component {
                       className={c.quantity}
                       style={{ fontSize: "15px", marginRight: "3px" }}
                     >
-                      {this.state.qty[idx]}
+                      {this.props.qty[idx]}
                     </p>
                     <button
                       className={c["qty-btn"]}
@@ -151,23 +164,25 @@ export class CartOverlay extends Component {
               <p>
                 <strong>
                   {/* ${this.props.cartItems.reduce((a, b) => a + +b.price, 0)} */}
-                  ${this.state.totalPrice}
+                  $
+                  {this.props.cartItems.length == 0 ? 0 : this.state.totalPrice}
                 </strong>
               </p>
             </div>
             <div className={c["checkout-btn-container"]}>
-              <button>VIEW BAG</button>
               <Link to="/cart">
-                <button
-                  style={{
-                    border: "#5ece7b",
-                    backgroundColor: "#5ece7b",
-                    color: "#fff",
-                  }}
-                >
-                  CHECK OUT
-                </button>
+                <button className={c["view-bag-btn"]}>VIEW BAG</button>
               </Link>
+              <button
+                style={{
+                  border: "#5ece7b",
+                  backgroundColor: "#5ece7b",
+                  color: "#fff",
+                }}
+                className={c["checkout-btn"]}
+              >
+                CHECK OUT
+              </button>
             </div>
           </div>
         ) : (
@@ -190,6 +205,8 @@ export const mapStateToProps = (props) => {
 
 export const mapDispatchToProps = {
   removeItem,
+  savePrice,
+  saveQty,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartOverlay);

@@ -7,6 +7,7 @@
   cursor: pointer;
 }
 
+/* Cart Overlay */
 .cart-container {
   position: fixed;
   font-size: 14px;
@@ -147,9 +148,9 @@
   margin: 20px 16px;
 }
 
-.checkout-btn-container :nth-child(1) {
+.view-bag-btn {
   height: 43px;
-  width: 140px;
+  width: 130px;
   border: 1px solid #1d1f22;
   font-weight: 500;
   font-family: "Roboto", sans-serif;
@@ -162,13 +163,27 @@
   align-items: center;
 }
 
+.view-bag-btn:hover {
+  cursor: pointer;
+}
 .checkout-btn-container > a {
   text-decoration: none;
 }
-.checkout-btn {
-  border: #5ece7b;
+.checkout-btn-container :nth-child(2) {
+  /* border: #5ece7b;
   color: #fff;
-  background-color: 5ece7b;
+  background-color: #5ece7b; */
+  height: 43px;
+  width: 140px;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+  white-space: nowrap;
+  background-color: #fff;
+  padding: 16px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .no-cart-items {
@@ -177,4 +192,91 @@
   right: 2rem;
   top: 6rem;
   white-space: nowrap;
+}
+
+/* Cart */
+
+.cart-items-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.big-size-details {
+  display: flex;
+}
+
+.big-size-details > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 7px 24px 0;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #1d1f22;
+}
+
+.big-size-details > div:nth-child(2) {
+  background-color: #1d1f22;
+  color: #fff;
+}
+
+.big-size-details > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 7px 24px 0;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #1d1f22;
+}
+
+.big-size-details > div:nth-child(2) {
+  background-color: #1d1f22;
+  color: #fff;
+}
+
+.big-color-details {
+  display: flex;
+  margin-top: -10px;
+}
+
+.big-color-details > div:nth-child(1) {
+  margin-right: 8px;
+  height: 18px;
+  width: 18px;
+  border: solid 1px #5ece7b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.big-color-details > div:nth-child(1) > div {
+  background-color: #d3d2d5;
+  height: 16px;
+  width: 16px;
+}
+
+.big-color-details > div:nth-child(2) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.big-color-details > div:nth-child(2) > div {
+  background-color: #2b2b2b;
+  height: 16px;
+  width: 16px;
+  margin-right: 8px;
+}
+
+.big-color-details > div:nth-child(3) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.big-color-details > div:nth-child(3) > div {
+  background-color: #0f6450;
+  height: 16px;
+  width: 16px;
+  margin-right: 8px;
 }

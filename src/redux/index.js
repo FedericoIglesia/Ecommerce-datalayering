@@ -1,4 +1,5 @@
 import {
+  ADD_QTY,
   ADD_TO_CART,
   FILTER_BY_CATEGORY,
   GET_ALL_PRODUCTS,
@@ -6,6 +7,8 @@ import {
   GET_PRODUCT_DETAIL,
   GREY_FLAG,
   REMOVE_CART_ITEM,
+  SAVE_PRICE,
+  SAVE_QTY,
 } from "./actions";
 
 import Swal from "sweetalert2";
@@ -19,6 +22,7 @@ const initialState = {
   cartItems: [JSON.parse(localStorage.getItem("cart"))] || [],
   flag: false,
   qty: [1],
+  totalPrice: 0,
 };
 
 console.log(initialState.cartItems);
@@ -63,7 +67,8 @@ const rootReducer = (state = initialState, action) => {
       const cart = state.cartItems;
       const id = action.payload;
       const item = prods.filter((i) => i.id === id);
-      let newLength = [...state.qty];
+      let newLength = state.qty;
+
       newLength.push(1);
 
       if (cart.some((c) => c.id === id)) {
@@ -78,15 +83,10 @@ const rootReducer = (state = initialState, action) => {
           ...state,
         };
       } else {
-        // let finalItem = item.map(
-        //   (i) =>
-        //     (i.qty = cart.some((c) => c.id == id) ? parseInt(state.qty) + 1 : 1)
-        // );
-
         return {
           ...state,
           cartItems: [...state.cartItems, item].flat(),
-          qty: newLength,
+          qty: [...newLength],
         };
       }
 
@@ -94,10 +94,13 @@ const rootReducer = (state = initialState, action) => {
       let idx = action.payload;
       let newArr = [...state.cartItems];
       newArr.splice(idx, 1);
+      let qtyArr = [...state.qty];
+      qtyArr.splice(idx, 1);
 
       return {
         ...state,
         cartItems: newArr,
+        qty: qtyArr,
       };
 
     // case GREY_FLAG:
@@ -107,6 +110,24 @@ const rootReducer = (state = initialState, action) => {
     //     flag: action.payload,
     //   };
 
+    case SAVE_PRICE:
+      return {
+        ...state,
+        totalPrice: action.payload,
+      };
+
+    case SAVE_QTY:
+      return {
+        ...state,
+        qty: action.payload,
+      };
+    case ADD_QTY:
+      let newQty = [...state.qty];
+      newQty.push(1);
+      return {
+        ...state,
+        qty: newQty,
+      };
     default:
       return state;
   }
