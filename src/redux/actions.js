@@ -9,6 +9,7 @@ export const GREY_FLAG = "GREY_FLAG";
 export const SAVE_PRICE = "SAVE_PRICE";
 export const SAVE_QTY = "SAVE_QTY";
 export const ADD_QTY = "ADD_QTY";
+export const SUB_QTY = "SUB_QTY";
 
 export const getAllProducts = () => {
   return async function (dispatch) {
@@ -71,9 +72,17 @@ export const saveQty = (payload) => {
   };
 };
 
-export const addQty = () => {
+export const addQty = (payload) => {
   return {
     type: ADD_QTY,
+    payload,
+  };
+};
+
+export const subQty = (payload) => {
+  return {
+    type: SUB_QTY,
+    payload,
   };
 };
 

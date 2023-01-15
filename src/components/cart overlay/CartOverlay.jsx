@@ -3,7 +3,13 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import c from "../cart/Cart.module.css";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { removeItem, savePrice, saveQty } from "../../redux/actions";
+import {
+  removeItem,
+  savePrice,
+  saveQty,
+  addQty,
+  subQty,
+} from "../../redux/actions";
 
 export class CartOverlay extends Component {
   constructor() {
@@ -16,83 +22,109 @@ export class CartOverlay extends Component {
     };
   }
 
-  componentDidMount() {
-    // let a = JSON.parse(localStorage.getItem("cart"));
-    // if (a) {
-    //   if (this.state.cartItems.length == 0) {
-    //     this.setState(() => {
-    //       return { cartItems: [a] };
-    //     });
-    //   }
-    // }
-    this.setState((prev) => {
-      return { totalPrice: +this.props.cartItems[0].price };
-    });
-    console.log(this.state.cartItems);
-  }
+  // componentDidMount() {
+  //   // let a = JSON.parse(localStorage.getItem("cart"));
+  //   // if (a) {
+  //   //   if (this.state.cartItems.length == 0) {
+  //   //     this.setState(() => {
+  //   //       return { cartItems: [a] };
+  //   //     });
+  //   //   }
+  //   // }
+  //   if (this.props.cartItems.length > 0) {
+  //     this.setState((prev) => {
+  //       return { totalPrice: +this.props.cartItems[0].price };
+  //     });
+  //   }
+  // }
 
   toggle = () => {
     this.setState((prev) => ({ displayCart: !prev.displayCart }));
     // this.props.grayedBody(!this.state.displayCart);
   };
 
-  handleSum = (idx) => {
-    let newArr = [...this.state.qty];
-    newArr[idx] = newArr[idx] + 1;
-    console.log(newArr[idx]);
-    // newArr.push(1);
+  // handleSum = (idx) => {
+  //   let newArr = [...this.state.qty];
+  //   newArr.length == this.props.cartItems.length;
+  //   console.log(newArr.length);
+  //   newArr[idx] = newArr[idx] + 1;
+  //   console.log(newArr[idx]);
+  //   // newArr.push(1);
 
-    this.setState((prev) => {
-      return {
-        qty: [...newArr],
-        totalPrice: prev.totalPrice + +this.props.cartItems[idx].price,
-      };
-    });
+  //   this.setState((prev) => {
+  //     return {
+  //       qty: [...newArr],
+  //       totalPrice: prev.totalPrice + +this.props.cartItems[idx].price,
+  //     };
+  //   });
+  // };
+
+  handleSum = (idx) => {
+    this.props.addQty(idx);
+    this.props.savePrice(
+      this.props.cartItems[idx].price * this.props.cartItems[idx].qty
+    );
   };
 
   handleSub = (idx) => {
-    console.log(idx);
-    let newArr = [...this.state.qty];
-    if (newArr[idx] > 1) {
-      newArr[idx] = newArr[idx] - 1;
-      this.setState((prev) => {
-        return {
-          qty: [...newArr],
-          totalPrice: prev.totalPrice - this.props.cartItems[idx].price,
-        };
-      });
-    } else {
-      this.props.removeItem(idx);
+    this.props.subQty(idx);
+    if (this.props.cartItems.length > 0) {
+      this.props.savePrice(
+        this.props.cartItems[idx].price * this.props.cartItems[idx].qty
+      );
     }
   };
+
+  // handleSub = (idx) => {
+  //   console.log(idx);
+  //   let newArr = [...this.state.qty];
+  //   if (newArr[idx] > 1) {
+  //     newArr[idx] = newArr[idx] - 1;
+  //     this.setState((prev) => {
+  //       return {
+  //         qty: [...newArr],
+  //         totalPrice: prev.totalPrice - this.props.cartItems[idx].price,
+  //       };
+  //     });
+  //   } else {
+  //     this.props.removeItem(idx);
+  //   }
+  // };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.qty !== this.state.qty) {
       this.props.saveQty(this.state.qty);
     }
-    if (prevState.totalPrice !== this.state.price) {
-      this.props.savePrice(this.state.totalPrice);
-    }
+    //   if (prevProps.totalPrice !== this.props.price) {
+    //     // this.props.savePrice(this.state.totalPrice);
+    //     this.setState(() => {
+    //       return { totalPrice: this.props.totalPrice };
+    //     });
+    //   }
   }
-
   // handleCartInfo = () => {
   //   this.props.savePrice(this.state.totalPrice);
   //   this.props.saveQty(this.state.qty);
   // };
 
   render() {
-    // let a = JSON.parse(localStorage.getItem("cart"));
+    {
+      this.props.cartItems.length > 0 &&
+        console.log(this.props.cartItems.reduce((a, b) => a + +b.price, 0));
+    }
     return (
       <div>
         <AiOutlineShoppingCart className={c.icon} onClick={this.toggle} />
-        {this.state.displayCart && this.props.cartItems.length > 0 ? (
+        {this.state.displayCart && this.props.cartItems.length ? (
           <div className={c["cart-container"]}>
             <h2 style={{ margin: "30px 16px" }}>
               My Bag,{" "}
               <span style={{ fontWeight: "400" }}>
-                {this.props.cartItems.length == 1
+                {this.props.cartItems.length == 1 &&
+                this.props.cartItems[0].qty == 1
                   ? this.props.cartItems.length + " item"
-                  : this.props.cartItems.length + " items"}{" "}
+                  : this.props.cartItems.reduce((a, b) => a + b.qty, 0) +
+                    " items"}{" "}
               </span>
             </h2>
             {this.props.cartItems.map((item, idx) => {
@@ -142,7 +174,7 @@ export class CartOverlay extends Component {
                       className={c.quantity}
                       style={{ fontSize: "15px", marginRight: "3px" }}
                     >
-                      {this.props.qty[idx]}
+                      {item.qty}
                     </p>
                     <button
                       className={c["qty-btn"]}
@@ -163,9 +195,11 @@ export class CartOverlay extends Component {
               </p>
               <p>
                 <strong>
-                  {/* ${this.props.cartItems.reduce((a, b) => a + +b.price, 0)} */}
                   $
-                  {this.props.cartItems.length == 0 ? 0 : this.state.totalPrice}
+                  {this.props.cartItems.reduce(
+                    (a, b) => a + +b.price * +b.qty,
+                    0
+                  )}
                 </strong>
               </p>
             </div>
@@ -200,6 +234,7 @@ export const mapStateToProps = (props) => {
     cartItems: props.cartItems,
     flag: props.flag,
     qty: props.qty,
+    totalPrice: props.totalPrice,
   };
 };
 
@@ -207,6 +242,8 @@ export const mapDispatchToProps = {
   removeItem,
   savePrice,
   saveQty,
+  addQty,
+  subQty,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartOverlay);

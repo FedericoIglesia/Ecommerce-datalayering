@@ -26,7 +26,6 @@ export class Categories extends Component {
 
   handleProductDetail(e) {
     localStorage.setItem("currentItem", JSON.stringify(e));
-
     this.props.getProductDetail(e.id);
   }
 

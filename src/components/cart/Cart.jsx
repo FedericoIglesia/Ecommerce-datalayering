@@ -2,7 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import ca from "./Cart.module.css";
 import Nav from "../nav/Nav";
-import { removeItem, savePrice, saveQty } from "../../redux/actions";
+import {
+  removeItem,
+  savePrice,
+  saveQty,
+  addQty,
+  subQty,
+} from "../../redux/actions";
 export class Cart extends Component {
   constructor() {
     super();
@@ -14,49 +20,69 @@ export class Cart extends Component {
     };
   }
 
-  componentDidMount() {
-    this.setState(() => {
-      return { totalPrice: +this.props.cartItems[0].price };
-    });
-  }
+  // componentDidMount() {
+  //   this.setState(() => {
+  //     return { totalPrice: +this.props.cartItems[0].price };
+  //   });
+  // }
+
+  // handleSum = (idx) => {
+  //   let newArr = [...this.state.qty];
+  //   newArr[idx] = newArr[idx] + 1;
+  //   // newArr.push(1);
+
+  //   this.setState((prev) => {
+  //     return {
+  //       qty: [...newArr],
+  //       totalPrice: prev.totalPrice + +this.props.cartItems[idx].price,
+  //     };
+  //   });
+  // };
 
   handleSum = (idx) => {
-    let newArr = [...this.state.qty];
-    newArr[idx] = newArr[idx] + 1;
-    // newArr.push(1);
-
-    this.setState((prev) => {
-      return {
-        qty: [...newArr],
-        totalPrice: prev.totalPrice + +this.props.cartItems[idx].price,
-      };
-    });
+    this.props.addQty(idx);
+    this.props.savePrice(
+      this.props.cartItems[idx].price * this.props.cartItems[idx].qty
+    );
   };
+
+  // handleSub = (idx) => {
+  //   console.log(idx);
+  //   let newArr = [...this.state.qty];
+  //   if (newArr[idx] > 1) {
+  //     newArr[idx] = newArr[idx] - 1;
+
+  //     this.setState((prev) => {
+  //       return {
+  //         qty: [...newArr],
+  //         totalPrice: prev.totalPrice - this.props.cartItems[idx].price,
+  //       };
+  //     });
+  //   } else {
+  //     this.props.savePrice(0);
+  //     this.props.removeItem(idx);
+  //   }
+  // };
 
   handleSub = (idx) => {
-    console.log(idx);
-    let newArr = [...this.state.qty];
-    if (newArr[idx] > 1) {
-      newArr[idx] = newArr[idx] - 1;
-
-      this.setState((prev) => {
-        return {
-          qty: [...newArr],
-          totalPrice: prev.totalPrice - this.props.cartItems[idx].price,
-        };
-      });
-    } else {
-      this.props.savePrice(0);
-      this.props.removeItem(idx);
-    }
+    this.props.subQty(idx);
+    this.props.savePrice(
+      this.props.cartItems[idx].price * this.props.cartItems[idx].qty
+    );
   };
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.qty !== this.state.qty) {
+  //     this.props.saveQty(this.state.qty);
+  //   }
+  //   if (prevState.totalPrice !== this.state.price) {
+  //     this.props.savePrice(this.state.totalPrice);
+  //   }
+  // }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.qty !== this.state.qty) {
       this.props.saveQty(this.state.qty);
-    }
-    if (prevState.totalPrice !== this.state.price) {
-      this.props.savePrice(this.state.totalPrice);
     }
   }
 
@@ -138,16 +164,28 @@ export class Cart extends Component {
               $
               {this.props.cartItems.length == 0
                 ? 0
-                : this.props.totalPrice * 0.42}
+                : this.props.cartItems.length > 0 &&
+                  this.props.cartItems.reduce(
+                    (a, b) => a + +b.price * +b.qty,
+                    0
+                  ) * 0.42}
             </span>
           </p>
           <p>
-            Quantity: <span>{this.props.qty.reduce((a, b) => a + b, 0)}</span>
+            Quantity:{" "}
+            <span>{this.props.cartItems.reduce((a, b) => a + +b.qty, 0)}</span>
           </p>
           <p>
             Total:{" "}
             <span>
-              ${this.props.cartItems.length == 0 ? 0 : this.props.totalPrice}
+              $
+              {this.props.cartItems.length == 0
+                ? 0
+                : this.props.cartItems.length > 0 &&
+                  this.props.cartItems.reduce(
+                    (a, b) => a + +b.price * +b.qty,
+                    0
+                  )}
             </span>
           </p>
           <button>ORDER</button>
@@ -170,6 +208,8 @@ export const mapDispatchToProps = {
   removeItem,
   savePrice,
   saveQty,
+  addQty,
+  subQty,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

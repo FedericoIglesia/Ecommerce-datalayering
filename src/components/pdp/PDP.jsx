@@ -4,6 +4,7 @@ import {
   addToCart,
   getProductDetail,
   getAllProducts,
+  savePrice,
 } from "../../redux/actions";
 import p from "./PDP.module.css";
 import Nav from "../nav/Nav";
@@ -28,7 +29,9 @@ export class PDP extends Component {
 
   handleAddToCart = () => {
     this.props.addToCart(this.state.storageItem.id);
-    localStorage.setItem("cart", JSON.stringify(this.state.storageItem));
+    this.props.savePrice(this.state.storageItem.price);
+    console.log("sending ID ==> " + this.state.storageItem.id);
+    // localStorage.setItem("cart", JSON.stringify(this.state.storageItem));
   };
 
   render() {
@@ -120,6 +123,7 @@ export const mapDispatchToProps = {
   addToCart,
   getProductDetail,
   getAllProducts,
+  savePrice,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PDP);

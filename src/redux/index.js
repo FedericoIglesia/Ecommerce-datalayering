@@ -9,6 +9,7 @@ import {
   REMOVE_CART_ITEM,
   SAVE_PRICE,
   SAVE_QTY,
+  SUB_QTY,
 } from "./actions";
 
 import Swal from "sweetalert2";
@@ -19,13 +20,12 @@ const initialState = {
   products: [],
   initialProducts: [],
   currentDetail: {},
-  cartItems: [JSON.parse(localStorage.getItem("cart"))] || [],
+  cartItems: [],
   flag: false,
   qty: [1],
   totalPrice: 0,
 };
 
-console.log(initialState.cartItems);
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_PRODUCTS:
@@ -36,7 +36,6 @@ const rootReducer = (state = initialState, action) => {
       };
 
     case FILTER_BY_CATEGORY:
-      console.log("REDUCER   " + action.payload);
       const allProducts = state.products;
       const filteredProducts = allProducts.filter(
         (p) => p.category === action.payload
@@ -57,32 +56,35 @@ const rootReducer = (state = initialState, action) => {
       const detailId = allProds.find(
         (product) => product.id === action.payload
       );
-      // console.log("REDUCEEER " + detailId.productName);
+
       return {
         ...state,
         currentDetail: detailId,
       };
     case ADD_TO_CART:
       const prods = state.products;
-      const cart = state.cartItems;
-      const id = action.payload;
-      const item = prods.filter((i) => i.id === id);
+      let cart = state.cartItems;
+      let id = action.payload;
+      let item = prods.filter((i) => i.id === id);
       let newLength = state.qty;
-
+      item[0]["qty"] = 1;
       newLength.push(1);
+      console.log(cart);
 
       if (cart.some((c) => c.id === id)) {
-        Swal.fire({
-          title: "You already have this item in the cart!",
-          text: "Please change the quantity to order from the cart",
-          icon: "Error",
-          confirmButtonText: "Back",
-        });
+        // Swal.fire({
+        //   title: "You already have this item in the cart!",
+        //   text: "Please change the quantity to order from the cart",
+        //   icon: "Error",
+        //   confirmButtonText: "Back",
+        // });
+        // cart[id].qty = cart[id].qty + 1;
 
         return {
           ...state,
         };
       } else {
+        console.log(state.cartItems);
         return {
           ...state,
           cartItems: [...state.cartItems, item].flat(),
@@ -111,6 +113,8 @@ const rootReducer = (state = initialState, action) => {
     //   };
 
     case SAVE_PRICE:
+      let itemPrice = action.payload;
+
       return {
         ...state,
         totalPrice: action.payload,
@@ -119,15 +123,36 @@ const rootReducer = (state = initialState, action) => {
     case SAVE_QTY:
       return {
         ...state,
-        qty: action.payload,
+        qty: [...action.payload],
       };
     case ADD_QTY:
-      let newQty = [...state.qty];
-      newQty.push(1);
+      let index = action.payload;
+      let sum1 = state.cartItems;
+      sum1[index].qty = sum1[index].qty + 1;
+      let newQ = sum1.map((a) => a.qty);
+
       return {
         ...state,
-        qty: newQty,
+        cartItems: sum1,
+        qty: newQ,
       };
+
+    case SUB_QTY:
+      let subIdx = action.paylod;
+      let sub1 = state.cartItems;
+      if (sub1[action.payload].qty > 1) {
+        sub1[action.payload].qty = sub1[action.payload].qty - 1;
+      } else {
+        sub1.splice(action.payload, 1);
+      }
+
+      let newQs = sub1.map((a) => a.qty);
+      return {
+        ...state,
+        cartItems: sub1,
+        qty: newQs,
+      };
+
     default:
       return state;
   }
