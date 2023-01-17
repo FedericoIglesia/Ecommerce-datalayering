@@ -57,6 +57,7 @@ export class Categories extends Component {
                     description={e.description}
                     category={e.category}
                     price={e.price}
+                    id={e.id}
                   />
                 </Link>
               ))

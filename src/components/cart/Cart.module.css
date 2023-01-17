@@ -314,7 +314,7 @@
   justify-content: space-between;
   border-top: 2px solid #e5e5e5;
   border-bottom: 1px solid #e5e5e5;
-  margin: 80px 100px 55px 100px;
+  margin: 0 100px;
 }
 
 .cart-details-container {
@@ -333,6 +333,7 @@
 .cart-qty-img {
   display: flex;
   flex-direction: row;
+  margin-bottom: 10px;
 }
 
 .cart-size-details {

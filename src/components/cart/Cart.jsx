@@ -98,7 +98,11 @@ export class Cart extends Component {
                   <div className={ca["cart-name-details"]}>
                     <h3 style={{ fontWeight: "400" }}>{item.productName}</h3>
                     <h3 style={{ marginTop: "-8px" }}>
-                      ${item.price * this.props.qty[idx]}
+                      {this.props.USDselected
+                        ? "$" + item.price * this.props.qty[idx]
+                        : this.props.EURselected
+                        ? "€" + item.price * this.props.qty[idx]
+                        : "¥" + (item.price * this.props.qty[idx]).toFixed(2)}
                     </h3>
                     <p style={{ marginTop: "-10px" }}>
                       <strong>SIZE:</strong>

@@ -155,7 +155,7 @@ export class CartOverlay extends Component {
                         ? "$" + item.price * this.props.qty[idx]
                         : this.props.EURselected
                         ? "€" + item.price * this.props.qty[idx]
-                        : "¥" + item.price * this.props.qty[idx]}
+                        : "¥" + (item.price * this.props.qty[idx]).toFixed(2)}
                     </h3>
                     <p style={{ marginTop: "-10px" }}>Size:</p>
                     <div className={c["size-details"]}>
