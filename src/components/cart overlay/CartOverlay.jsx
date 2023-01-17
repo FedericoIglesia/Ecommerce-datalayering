@@ -9,6 +9,7 @@ import {
   saveQty,
   addQty,
   subQty,
+  grayedBody,
 } from "../../redux/actions";
 
 export class CartOverlay extends Component {
@@ -20,27 +21,29 @@ export class CartOverlay extends Component {
       qty: [1],
       totalPrice: 0,
     };
+    this.modalRef = React.createRef();
   }
 
-  // componentDidMount() {
-  //   // let a = JSON.parse(localStorage.getItem("cart"));
-  //   // if (a) {
-  //   //   if (this.state.cartItems.length == 0) {
-  //   //     this.setState(() => {
-  //   //       return { cartItems: [a] };
-  //   //     });
-  //   //   }
-  //   // }
-  //   if (this.props.cartItems.length > 0) {
-  //     this.setState((prev) => {
-  //       return { totalPrice: +this.props.cartItems[0].price };
-  //     });
-  //   }
-  // }
+  componentDidMount() {
+    //   // let a = JSON.parse(localStorage.getItem("cart"));
+    //   // if (a) {
+    //   //   if (this.state.cartItems.length == 0) {
+    //   //     this.setState(() => {
+    //   //       return { cartItems: [a] };
+    //   //     });
+    //   //   }
+    //   // }
+    //   if (this.props.cartItems.length > 0) {
+    //     this.setState((prev) => {
+    //       return { totalPrice: +this.props.cartItems[0].price };
+    //     });
+    //   }
+    document.addEventListener("click", this.handleClickOutside);
+  }
 
   toggle = () => {
     this.setState((prev) => ({ displayCart: !prev.displayCart }));
-    // this.props.grayedBody(!this.state.displayCart);
+    this.props.grayedBody(!this.state.displayCart);
   };
 
   // handleSum = (idx) => {
@@ -58,6 +61,17 @@ export class CartOverlay extends Component {
   //     };
   //   });
   // };
+
+  handleClickOutside = (e) => {
+    if (this.modalRef.current && !this.modalRef.current.contains(e.target)) {
+      this.setState({ displayCart: false });
+      this.props.grayedBody(false);
+    }
+  };
+
+  componentWillUnmount() {
+    document.removeEventListener("click", this.handleClickOutside);
+  }
 
   handleSum = (idx) => {
     this.props.addQty(idx);
@@ -113,7 +127,11 @@ export class CartOverlay extends Component {
         console.log(this.props.cartItems.reduce((a, b) => a + +b.price, 0));
     }
     return (
-      <div>
+      <div ref={this.modalRef}>
+        <div className={this.props.cartItems.length > 0 ? c["icon-qty"] : ""}>
+          {this.props.cartItems.length > 0 &&
+            this.props.cartItems.reduce((a, b) => a + b.qty, 0)}
+        </div>
         <AiOutlineShoppingCart className={c.icon} onClick={this.toggle} />
         {this.state.displayCart && this.props.cartItems.length ? (
           <div className={c["cart-container"]}>
@@ -133,7 +151,11 @@ export class CartOverlay extends Component {
                   <div className={c["details-container"]}>
                     <h3 style={{ fontWeight: "400" }}>{item.productName}</h3>
                     <h3 style={{ marginTop: "-8px" }}>
-                      ${item.price * this.props.qty[idx]}
+                      {this.props.USDselected
+                        ? "$" + item.price * this.props.qty[idx]
+                        : this.props.EURselected
+                        ? "€" + item.price * this.props.qty[idx]
+                        : "¥" + item.price * this.props.qty[idx]}
                     </h3>
                     <p style={{ marginTop: "-10px" }}>Size:</p>
                     <div className={c["size-details"]}>
@@ -195,11 +217,23 @@ export class CartOverlay extends Component {
               </p>
               <p>
                 <strong>
-                  $
-                  {this.props.cartItems.reduce(
-                    (a, b) => a + +b.price * +b.qty,
-                    0
-                  )}
+                  {this.props.USDselected
+                    ? "$" +
+                      this.props.cartItems.reduce(
+                        (a, b) => a + +b.price * +b.qty,
+                        0
+                      )
+                    : this.props.EURselected
+                    ? "€" +
+                      this.props.cartItems.reduce(
+                        (a, b) => a + +b.price * +b.qty,
+                        0
+                      )
+                    : "¥" +
+                      this.props.cartItems.reduce(
+                        (a, b) => a + +b.price * +b.qty,
+                        0
+                      )}
                 </strong>
               </p>
             </div>
@@ -220,9 +254,13 @@ export class CartOverlay extends Component {
             </div>
           </div>
         ) : (
-          <div className={c["no-cart-items"]}>
-            {this.state.displayCart && "NO ITEMS IN THE CART"}
-          </div>
+          <>
+            {this.state.displayCart && (
+              <div className={c["no-cart-items"]}>
+                <p>{"NO ITEMS IN THE CART"}</p>
+              </div>
+            )}
+          </>
         )}
       </div>
     );
@@ -235,6 +273,9 @@ export const mapStateToProps = (props) => {
     flag: props.flag,
     qty: props.qty,
     totalPrice: props.totalPrice,
+    EURselected: props.EURselected,
+    USDselected: props.USDselected,
+    JPYselected: props.JPYselected,
   };
 };
 
@@ -244,6 +285,7 @@ export const mapDispatchToProps = {
   saveQty,
   addQty,
   subQty,
+  grayedBody,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartOverlay);

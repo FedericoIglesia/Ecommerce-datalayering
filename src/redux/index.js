@@ -1,6 +1,7 @@
 import {
   ADD_QTY,
   ADD_TO_CART,
+  CURRENCY_CONVERTER,
   FILTER_BY_CATEGORY,
   GET_ALL_PRODUCTS,
   GET_CART_ITEMS,
@@ -24,6 +25,10 @@ const initialState = {
   flag: false,
   qty: [1],
   totalPrice: 0,
+  JPYselected: false,
+  EURselected: false,
+  USDselected: true,
+  conversionRate: 1,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -105,12 +110,11 @@ const rootReducer = (state = initialState, action) => {
         qty: qtyArr,
       };
 
-    // case GREY_FLAG:
-    //   console.log("flag => " + action.payload);
-    //   return {
-    //     ...state,
-    //     flag: action.payload,
-    //   };
+    case GREY_FLAG:
+      return {
+        ...state,
+        flag: action.payload,
+      };
 
     case SAVE_PRICE:
       let itemPrice = action.payload;
@@ -152,6 +156,187 @@ const rootReducer = (state = initialState, action) => {
         cartItems: sub1,
         qty: newQs,
       };
+
+    //since only 3 currencies are needed in this mock, i chose to do a manual conversion setup instead of consuming an external API, however it is important to note that floating point errors natural to this calculations could accumulate and reflect innacuracies in the final conversion overtime.
+    case CURRENCY_CONVERTER:
+      let convertedProds = state.initialProducts.map((i) => ({
+        ...i,
+        initialPrice: i.price,
+      }));
+      let convertedCart = state.cartItems.map((i) => ({
+        ...i,
+        initialPrice: i.price,
+      }));
+      let currentRate = 1;
+      if (action.payload == "eur") {
+        if (state.USDselected) {
+          currentRate = 0.9234;
+          convertedProds = convertedProds.map((i) => {
+            let newObj = { ...i };
+            newObj.price = parseFloat(
+              parseFloat(newObj.initialPrice) * currentRate
+            ).toFixed(2);
+
+            return newObj;
+          });
+          convertedCart = convertedCart.map((i) => {
+            let newObj = { ...i };
+            newObj.price = parseFloat(
+              parseFloat(newObj.initialPrice) * currentRate
+            ).toFixed(2);
+
+            return newObj;
+          });
+          return {
+            ...state,
+            initialProducts: convertedProds,
+            EURselected: true,
+            USDselected: false,
+            conversionRate: currentRate,
+            cartItems: convertedCart,
+          };
+        } else if (state.JPYselected) {
+          currentRate = 0.0072;
+          convertedProds = convertedProds.map((i) => {
+            let newObj = { ...i };
+            newObj.price = parseFloat(
+              parseFloat(newObj.initialPrice) * currentRate
+            ).toFixed(2);
+            return newObj;
+          });
+          convertedCart = convertedCart.map((i) => {
+            let newObj = { ...i };
+            newObj.price = parseFloat(
+              parseFloat(newObj.initialPrice) * currentRate
+            ).toFixed(2);
+
+            return newObj;
+          });
+          return {
+            ...state,
+            initialProducts: convertedProds,
+            EURselected: true,
+            JPYselected: false,
+            conversionRate: currentRate,
+            cartItems: convertedCart,
+          };
+        } else {
+          return {
+            ...state,
+          };
+        }
+      } else if (action.payload == "jpy") {
+        if (state.USDselected) {
+          currentRate = 128.3411;
+          convertedProds = convertedProds.map((i) => {
+            let newObj = { ...i };
+            newObj.price = parseFloat(
+              parseFloat(newObj.initialPrice) * currentRate
+            ).toFixed(2);
+            return newObj;
+          });
+          convertedCart = convertedCart.map((i) => {
+            let newObj = { ...i };
+            newObj.price = parseFloat(
+              parseFloat(newObj.initialPrice) * currentRate
+            ).toFixed(2);
+
+            return newObj;
+          });
+          return {
+            ...state,
+            initialProducts: convertedProds,
+            JPYselected: true,
+            USDselected: false,
+            conversionRate: currentRate,
+            cartItems: convertedCart,
+          };
+        } else if (state.EURselected) {
+          currentRate = 139.0211;
+          convertedProds = convertedProds.map((i) => {
+            let newObj = { ...i };
+            newObj.price = parseFloat(
+              parseFloat(newObj.initialPrice) * currentRate
+            ).toFixed(2);
+            return newObj;
+          });
+          convertedCart = convertedCart.map((i) => {
+            let newObj = { ...i };
+            newObj.price = parseFloat(
+              parseFloat(newObj.initialPrice) * currentRate
+            ).toFixed(2);
+
+            return newObj;
+          });
+          return {
+            ...state,
+            initialProducts: convertedProds,
+            JPYselected: true,
+            EURselected: false,
+            conversionRate: currentRate,
+            cartItems: convertedCart,
+          };
+        } else {
+          return {
+            ...state,
+          };
+        }
+      } else {
+        if (state.EURselected) {
+          currentRate = 1.0829;
+          convertedProds = convertedProds.map((i) => {
+            let newObj = { ...i };
+            newObj.price = parseFloat(
+              parseFloat(newObj.initialPrice) * currentRate
+            ).toFixed(2);
+            return newObj;
+          });
+          convertedCart = convertedCart.map((i) => {
+            let newObj = { ...i };
+            newObj.price = parseFloat(
+              parseFloat(newObj.initialPrice) * currentRate
+            ).toFixed(2);
+
+            return newObj;
+          });
+          return {
+            ...state,
+            initialProducts: convertedProds,
+            USDselected: true,
+            EURselected: false,
+            conversionRate: currentRate,
+            cartItems: convertedCart,
+          };
+        } else if (state.JPYselected) {
+          currentRate = 0.0079;
+          convertedProds = convertedProds.map((i) => {
+            let newObj = { ...i };
+            newObj.price = parseFloat(
+              parseFloat(newObj.initialPrice) * currentRate
+            ).toFixed(2);
+            return newObj;
+          });
+          convertedCart = convertedCart.map((i) => {
+            let newObj = { ...i };
+            newObj.price = parseFloat(
+              parseFloat(newObj.initialPrice) * currentRate
+            ).toFixed(2);
+
+            return newObj;
+          });
+          return {
+            ...state,
+            initialProducts: convertedProds,
+            USDselected: true,
+            JPYselected: false,
+            cartItems: convertedCart,
+          };
+        } else {
+          return {
+            ...state,
+          };
+        }
+      }
 
     default:
       return state;

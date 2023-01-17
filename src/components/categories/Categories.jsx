@@ -32,10 +32,7 @@ export class Categories extends Component {
   render() {
     return (
       <>
-        <section
-          className={c.products}
-          style={this.props.flag ? { background: "grey" } : {}}
-        >
+        <section className={c.products}>
           <h2>
             {this.props.initialProducts.length
               ? this.props.initialProducts[0].category[0].toUpperCase() +

@@ -1,0 +1,62 @@
+.currency-container:hover {
+  cursor: pointer;
+}
+
+.currency-options {
+  position: fixed;
+  width: 114px;
+  height: 169px;
+  right: 2rem;
+  top: 6rem;
+
+  box-shadow: 2px 1px 1px 1px #d7d7d7;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+.currency-options:before {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(0deg, #828282 38%, #dedede 160%);
+  transform: translate3d(0px, 0px, 0) scale(0.95);
+  filter: blur(9px);
+  opacity: var(0.7);
+  transition: opacity 0.3s;
+  border-radius: inherit;
+}
+
+/* 
+* Prevents issues when the parent creates a 
+* stacking context. (For example, using the transform
+* property )
+*/
+.currency-options::after {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: inherit;
+  border-radius: inherit;
+}
+
+.currency-options > button {
+  background-color: #fff;
+  max-width: 100%;
+  height: 100%;
+  border: none;
+  font-size: 18px;
+  font-weight: 500;
+}
+.currency-options > button:hover {
+  cursor: pointer;
+  background-color: #eeeeee;
+}

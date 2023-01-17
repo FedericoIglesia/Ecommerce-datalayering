@@ -10,10 +10,12 @@ export const SAVE_PRICE = "SAVE_PRICE";
 export const SAVE_QTY = "SAVE_QTY";
 export const ADD_QTY = "ADD_QTY";
 export const SUB_QTY = "SUB_QTY";
+export const CURRENCY_CONVERTER = "CURRENCY_CONVERTER";
 
 export const getAllProducts = () => {
   return async function (dispatch) {
-    return fetch("https://apimocha.com/clothing/products")
+    // return fetch("https://apimocha.com/clothing/products")
+    return fetch("https://mocki.io/v1/6dcd97f7-5aa4-4d7a-92f0-46dd0d097659")
       .then((res) => res.json())
       .then((json) =>
         dispatch({
@@ -96,6 +98,13 @@ export const getProductDetail = (payload) => {
 export const grayedBody = (payload) => {
   return {
     type: GREY_FLAG,
+    payload,
+  };
+};
+
+export const convertCurrency = (payload) => {
+  return {
+    type: CURRENCY_CONVERTER,
     payload,
   };
 };

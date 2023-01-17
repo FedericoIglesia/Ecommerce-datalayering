@@ -20,6 +20,7 @@ export class App extends React.Component {
     return (
       <BrowserRouter>
         <Nav />
+        <Overlay />
         <Routes>
           <Route exact path="/" element={<Categories />} />
           <Route path="/cart" element={<Cart />} />

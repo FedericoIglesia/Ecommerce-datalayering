@@ -8,10 +8,11 @@ export class Overlay extends Component {
         style={
           this.props.flag
             ? {
-                background: "rgba(57, 55, 72, 0.22)",
-                maxWidth: "100%",
-                height: "100vmax",
-                position: "relative",
+                background: "rgba(57, 55, 72, 0.42)",
+                width: "100vw",
+                height: "95vh",
+                position: "absolute",
+                zIndex: 1,
               }
             : {}
         }

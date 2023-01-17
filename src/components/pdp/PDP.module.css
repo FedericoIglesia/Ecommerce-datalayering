@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  margin: 72px 219px 178px 96px;
+  margin: 72px 319px 0 96px;
 }
 
 .small-img--container {
@@ -20,8 +20,15 @@
   margin-right: 55px;
 }
 .big-img--container img {
-  width: 70vmin;
+  width: 60vmin;
   height: 60vmin;
+}
+
+.details--container {
+  margin-top: -1.4rem;
+}
+.details--container > h2 {
+  margin-bottom: 3rem;
 }
 
 .size-details {
@@ -30,7 +37,7 @@
 }
 
 .size-details > div {
-  margin: 0 12px 24px 0;
+  margin: -5px 12px 24px 0;
   text-align: center;
   vertical-align: center;
   width: 63px;
@@ -46,6 +53,9 @@
 
 .color-details {
   display: flex;
+}
+.color-details > div {
+  margin-top: -5px;
 }
 
 .color-details > div:nth-child(1) {

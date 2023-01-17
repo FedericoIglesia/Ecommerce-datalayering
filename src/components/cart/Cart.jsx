@@ -89,86 +89,115 @@ export class Cart extends Component {
   render() {
     return (
       <>
-        <h2>CART</h2>
+        <h2 className={ca["cart-title"]}>CART</h2>
         {this.props.cartItems.length > 0 ? (
           this.props.cartItems.map((item, idx) => {
             return (
-              <div className={ca["items-container"]} key={item.id}>
-                <div className={ca["details-container"]}>
-                  <h3 style={{ fontWeight: "400" }}>{item.productName}</h3>
-                  <h3 style={{ marginTop: "-8px" }}>
-                    ${item.price * this.props.qty[idx]}
-                  </h3>
-                  <p style={{ marginTop: "-10px" }}>SIZE:</p>
-                  <div className={ca["size-details"]}>
-                    <div>
-                      <p>XS</p>
+              <div className={ca["cart-items-container"]} key={item.id}>
+                <div className={ca["cart-details-container"]}>
+                  <div className={ca["cart-name-details"]}>
+                    <h3 style={{ fontWeight: "400" }}>{item.productName}</h3>
+                    <h3 style={{ marginTop: "-8px" }}>
+                      ${item.price * this.props.qty[idx]}
+                    </h3>
+                    <p style={{ marginTop: "-10px" }}>
+                      <strong>SIZE:</strong>
+                    </p>
+                    <div className={ca["cart-size-details"]}>
+                      <div>
+                        <p>XS</p>
+                      </div>
+                      <div>
+                        <p>S</p>
+                      </div>
+                      <div>
+                        <p>M</p>
+                      </div>
+                      <div>
+                        <p>L</p>
+                      </div>
                     </div>
-                    <div>
-                      <p>S</p>
-                    </div>
-                    <div>
-                      <p>M</p>
-                    </div>
-                    <div>
-                      <p>L</p>
-                    </div>
-                  </div>
-                  <p style={{ marginTop: "-10px" }}>COLOR:</p>
-                  <div className={ca["color-details"]}>
-                    <div>
-                      <div className={ca["color-details--selected"]}></div>
-                    </div>
-                    <div>
-                      <div></div>
-                    </div>
-                    <div>
-                      <div></div>
+                    <p style={{ marginTop: "-10px" }}>
+                      <strong>COLOR:</strong>
+                    </p>
+                    <div className={ca["cart-color-details"]}>
+                      <div>
+                        <div
+                          className={ca["cart-color-details--selected"]}
+                        ></div>
+                      </div>
+                      <div>
+                        <div></div>
+                      </div>
+                      <div>
+                        <div></div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className={ca["qty-container"]}>
-                  <button
-                    className={ca["qty-btn"]}
-                    onClick={() => this.handleSum(idx)}
-                  >
-                    +
-                  </button>
-                  <p
-                    className={ca.quantity}
-                    style={{ fontSize: "15px", marginRight: "3px" }}
-                  >
-                    {this.props.qty[idx]}
-                  </p>
-                  <button
-                    className={ca["qty-btn"]}
-                    onClick={() => this.handleSub(idx)}
-                  >
-                    -
-                  </button>
-                </div>
-                <div>
-                  <img className={ca["item-img"]} src={item.img} />
+                <div className={ca["cart-qty-img"]}>
+                  <div className={ca["cart-qty-container"]}>
+                    <button
+                      className={ca["cart-qty-btn"]}
+                      onClick={() => this.handleSum(idx)}
+                    >
+                      +
+                    </button>
+                    <p
+                      className={ca.quantity}
+                      style={{ fontSize: "15px", marginRight: "3px" }}
+                    >
+                      {this.props.qty[idx]}
+                    </p>
+                    <button
+                      className={ca["qty-btn"]}
+                      onClick={() => this.handleSub(idx)}
+                    >
+                      -
+                    </button>
+                  </div>
+                  <div>
+                    <img className={ca["cart-item-img"]} src={item.img} />
+                  </div>
                 </div>
               </div>
             );
           })
         ) : (
-          <h3>You have no products in the cart yet!</h3>
+          <h3 className={ca["cart-final-details"]}>
+            You have no products in the cart yet!
+          </h3>
         )}
 
-        <div>
+        <div className={ca["cart-final-details"]}>
           <p>
             Tax 21%:{" "}
             <span>
-              $
               {this.props.cartItems.length == 0
                 ? 0
-                : this.props.cartItems.length > 0 &&
-                  this.props.cartItems.reduce(
-                    (a, b) => a + +b.price * +b.qty,
-                    0
-                  ) * 0.42}
+                : this.props.USDselected
+                ? "$" +
+                  (
+                    this.props.cartItems.reduce(
+                      (a, b) => a + +b.price * +b.qty,
+                      0
+                    ) * 0.42
+                  ).toFixed(2)
+                : this.props.EURselected
+                ? "€" +
+                  (
+                    this.props.cartItems.reduce(
+                      (a, b) => a + +b.price * +b.qty,
+                      0
+                    ) * 0.42
+                  ).toFixed(2)
+                : "¥" +
+                  (
+                    this.props.cartItems.reduce(
+                      (a, b) => a + +b.price * +b.qty,
+                      0
+                    ) * 0.42
+                  ).toFixed(2)}
             </span>
           </p>
           <p>
@@ -178,17 +207,39 @@ export class Cart extends Component {
           <p>
             Total:{" "}
             <span>
-              $
               {this.props.cartItems.length == 0
                 ? 0
-                : this.props.cartItems.length > 0 &&
+                : this.props.USDselected
+                ? "$" +
+                  this.props.cartItems.reduce(
+                    (a, b) => a + +b.price * +b.qty,
+                    0
+                  )
+                : this.props.EURselected
+                ? "€" +
+                  this.props.cartItems.reduce(
+                    (a, b) => a + +b.price * +b.qty,
+                    0
+                  )
+                : "¥" +
                   this.props.cartItems.reduce(
                     (a, b) => a + +b.price * +b.qty,
                     0
                   )}
             </span>
           </p>
-          <button>ORDER</button>
+          <button
+            className={ca["checkout-btn"]}
+            style={{
+              border: "#5ece7b",
+              backgroundColor: "#5ece7b",
+              color: "#fff",
+              width: "279px",
+              height: "43px",
+            }}
+          >
+            ORDER
+          </button>
         </div>
       </>
     );
@@ -201,6 +252,9 @@ export const mapStateToProps = (props) => {
     flag: props.flag,
     qty: props.qty,
     totalPrice: props.totalPrice,
+    EURselected: props.EURselected,
+    USDselected: props.USDselected,
+    JPYselected: props.JPYselected,
   };
 };
 

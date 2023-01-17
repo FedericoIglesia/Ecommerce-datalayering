@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import {
   addToCart,
   getProductDetail,
@@ -30,11 +31,12 @@ export class PDP extends Component {
   handleAddToCart = () => {
     this.props.addToCart(this.state.storageItem.id);
     this.props.savePrice(this.state.storageItem.price);
-    console.log("sending ID ==> " + this.state.storageItem.id);
+
     // localStorage.setItem("cart", JSON.stringify(this.state.storageItem));
   };
 
   render() {
+    console.log(this.props.USDselected);
     return (
       <>
         <div className={p.container}>
@@ -91,8 +93,19 @@ export class PDP extends Component {
             </p>
             <p style={{ fontSize: "24px" }}>
               <strong>
-                $
-                {this.props.currentDetail.price || this.state.storageItem.price}
+                {this.props.USDselected
+                  ? "$" + this.state.storageItem.price
+                  : this.props.EURselected
+                  ? "€" + this.state.storageItem.price
+                  : "¥" + this.state.storageItem.price}
+                {/* {this.props.initialProducts
+                  ? this.props.initialProducts.find(
+                      (i) => i.id == this.state.storageItem.id
+                    ).price
+                  : "$" + this.props.currentDetail.price ||
+                    this.state.storageItem.price} */}
+
+                {/* {this.state.storageItem.price} */}
               </strong>
             </p>
             <button
@@ -115,7 +128,11 @@ export class PDP extends Component {
 export const mapStateToProps = (props) => {
   return {
     currentDetail: props.currentDetail,
+    initialProducts: props.initialProducts,
     flag: props.flag,
+    EURselected: props.EURselected,
+    USDselected: props.USDselected,
+    JPYselected: props.JPYselected,
   };
 };
 

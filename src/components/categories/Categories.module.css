@@ -5,6 +5,8 @@
   top: 0;
   width: 100%;
   overflow-x: hidden;
+  overflow-y: hidden;
+  position: relative;
 }
 
 .nav-container {
@@ -60,26 +62,41 @@
 }
 
 .products {
-  margin-top: 12rem;
+  margin-top: 8rem;
 }
 
 .products h2 {
   position: absolute;
-  top: 160px;
+  top: 130px;
   font-weight: 400;
-  margin: 0 0 70px 117px;
+  margin: 0 0 40px 117px;
 }
 
 .products-container {
   margin-right: 100px;
+  transform: translateY(-2rem);
   display: grid;
   grid-template-columns: 20% 20% 20%;
   justify-content: center;
-  column-gap: 150px;
-  row-gap: 50px;
+  column-gap: 120px;
+  row-gap: 30px;
 }
 
+.products-container > a {
+  text-decoration: none;
+  color: #1d1f22;
+}
+
+/* .card-container {
+  display: flex;
+  flex-direction: column;
+} */
+
 .img {
-  height: 316px;
-  width: 308px;
+  height: 246px;
+  width: 238px;
+}
+
+.currency-container:hover {
+  cursor: pointer;
 }
