@@ -25,19 +25,6 @@ export class CartOverlay extends Component {
   }
 
   componentDidMount() {
-    //   // let a = JSON.parse(localStorage.getItem("cart"));
-    //   // if (a) {
-    //   //   if (this.state.cartItems.length == 0) {
-    //   //     this.setState(() => {
-    //   //       return { cartItems: [a] };
-    //   //     });
-    //   //   }
-    //   // }
-    //   if (this.props.cartItems.length > 0) {
-    //     this.setState((prev) => {
-    //       return { totalPrice: +this.props.cartItems[0].price };
-    //     });
-    //   }
     document.addEventListener("click", this.handleClickOutside);
   }
 
@@ -45,22 +32,6 @@ export class CartOverlay extends Component {
     this.setState((prev) => ({ displayCart: !prev.displayCart }));
     this.props.grayedBody(!this.state.displayCart);
   };
-
-  // handleSum = (idx) => {
-  //   let newArr = [...this.state.qty];
-  //   newArr.length == this.props.cartItems.length;
-  //   console.log(newArr.length);
-  //   newArr[idx] = newArr[idx] + 1;
-  //   console.log(newArr[idx]);
-  //   // newArr.push(1);
-
-  //   this.setState((prev) => {
-  //     return {
-  //       qty: [...newArr],
-  //       totalPrice: prev.totalPrice + +this.props.cartItems[idx].price,
-  //     };
-  //   });
-  // };
 
   handleClickOutside = (e) => {
     if (this.modalRef.current && !this.modalRef.current.contains(e.target)) {
@@ -89,37 +60,11 @@ export class CartOverlay extends Component {
     }
   };
 
-  // handleSub = (idx) => {
-  //   console.log(idx);
-  //   let newArr = [...this.state.qty];
-  //   if (newArr[idx] > 1) {
-  //     newArr[idx] = newArr[idx] - 1;
-  //     this.setState((prev) => {
-  //       return {
-  //         qty: [...newArr],
-  //         totalPrice: prev.totalPrice - this.props.cartItems[idx].price,
-  //       };
-  //     });
-  //   } else {
-  //     this.props.removeItem(idx);
-  //   }
-  // };
-
   componentDidUpdate(prevProps, prevState) {
     if (prevState.qty !== this.state.qty) {
       this.props.saveQty(this.state.qty);
     }
-    //   if (prevProps.totalPrice !== this.props.price) {
-    //     // this.props.savePrice(this.state.totalPrice);
-    //     this.setState(() => {
-    //       return { totalPrice: this.props.totalPrice };
-    //     });
-    //   }
   }
-  // handleCartInfo = () => {
-  //   this.props.savePrice(this.state.totalPrice);
-  //   this.props.saveQty(this.state.qty);
-  // };
 
   render() {
     {

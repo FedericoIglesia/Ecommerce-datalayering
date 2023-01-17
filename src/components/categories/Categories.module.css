@@ -60,6 +60,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 30px;
+  margin-right: 70px;
 }
 
 .currency-container:hover {
@@ -101,7 +102,7 @@
   align-items: center;
   flex-direction: column;
   background-color: #fff;
-  width: 270px;
+  width: 280px;
   height: 372px;
 }
 
@@ -140,7 +141,7 @@
 
 .img {
   height: 246px;
-  width: 238px;
+  width: 268px;
 }
 
 .card-item-cart {
@@ -148,7 +149,7 @@
   width: 48px;
   position: absolute;
   border-radius: 50%;
-  top: 205px;
+  top: 215px;
   right: 10px;
   display: flex;
   justify-content: center;
