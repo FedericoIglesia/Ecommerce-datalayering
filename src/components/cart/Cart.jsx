@@ -66,6 +66,10 @@ export class Cart extends Component {
                 price: this.props.cartItems.map((item) => item.price),
                 category: this.props.cartItems.map((item) => item.category),
                 quantity: this.props.cartItems.map((item) => item.qty),
+                dimension1: this.props.cartItems.map((item) => item.id),
+                dimension2: this.props.cartItems.map(
+                  (item) => item.productName
+                ),
               },
             ],
           },

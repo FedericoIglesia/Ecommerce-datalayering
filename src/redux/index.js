@@ -161,6 +161,8 @@ const rootReducer = (state = initialState, action) => {
                     name: state.cartItems[action.payload].productName,
                     price: state.cartItems[action.payload].price,
                     category: state.cartItems[action.payload].category,
+                    dimension1: state.cartItems[action.payload].id,
+                    dimension2: state.cartItems[action.payload].productName,
                   },
                 ],
               },
