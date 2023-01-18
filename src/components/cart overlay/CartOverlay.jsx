@@ -67,10 +67,10 @@ export class CartOverlay extends Component {
   }
 
   render() {
-    {
-      this.props.cartItems.length > 0 &&
-        console.log(this.props.cartItems.reduce((a, b) => a + +b.price, 0));
-    }
+    // {
+    //   this.props.cartItems.length > 0 &&
+    //     console.log(this.props.cartItems.reduce((a, b) => a + +b.price, 0));
+    // }
     return (
       <div ref={this.modalRef}>
         <div className={this.props.cartItems.length > 0 ? c["icon-qty"] : ""}>

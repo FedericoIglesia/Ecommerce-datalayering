@@ -9,6 +9,7 @@ import {
 } from "../../redux/actions";
 import p from "./PDP.module.css";
 import Nav from "../nav/Nav";
+import TagManager from "react-gtm-module";
 
 export class PDP extends Component {
   constructor() {
@@ -22,21 +23,65 @@ export class PDP extends Component {
   componentDidMount() {
     this.props.getAllProducts();
     let a = JSON.parse(localStorage.getItem("currentItem"));
-    if (a)
+    if (a) {
       this.setState(() => {
         return { storageItem: a };
       });
+    }
+  }
+
+  componentDidUpdate(prevState) {
+    if (prevState.storageItem !== this.state.storageItem) {
+      TagManager.dataLayer({
+        dataLayer: {
+          event: "productDetail",
+          ecommerce: {
+            detail: {
+              products: [
+                {
+                  id: this.state.storageItem.id,
+                  name: this.state.storageItem.productName,
+                  price: this.state.storageItem.price,
+                  category: this.state.storageItem.category,
+                  position: this.state.storageItem.id - 1,
+                },
+              ],
+            },
+          },
+        },
+      });
+    }
   }
 
   handleAddToCart = () => {
     this.props.addToCart(this.state.storageItem.id);
     this.props.savePrice(this.state.storageItem.price);
-
+    TagManager.dataLayer({
+      dataLayer: {
+        event: "addToCart",
+        ecommerce: {
+          currencyCode: this.props.USDselected
+            ? "USD"
+            : this.props.EURselected
+            ? "EUR"
+            : "JPY",
+          add: {
+            products: [
+              {
+                id: this.state.storageItem.id,
+                name: this.state.storageItem.productName,
+                price: this.state.storageItem.price,
+                category: this.state.storageItem.category,
+              },
+            ],
+          },
+        },
+      },
+    });
     // localStorage.setItem("cart", JSON.stringify(this.state.storageItem));
   };
 
   render() {
-    console.log(this.props.USDselected);
     return (
       <>
         <div className={p.container}>

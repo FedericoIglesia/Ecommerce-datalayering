@@ -12,6 +12,7 @@ import {
 } from "../../redux/actions";
 import { Link } from "react-router-dom";
 import { current } from "@reduxjs/toolkit";
+import TagManager from "react-gtm-module";
 
 export class Categories extends Component {
   constructor() {
@@ -27,6 +28,53 @@ export class Categories extends Component {
   handleProductDetail(e) {
     localStorage.setItem("currentItem", JSON.stringify(e));
     this.props.getProductDetail(e.id);
+    TagManager.dataLayer({
+      dataLayer: {
+        event: "productClick",
+        ecommerce: {
+          click: {
+            actionField: { list: "list" },
+            products: [
+              {
+                id: e.id,
+                name: e.productName,
+                price: e.price,
+                category: e.category,
+                position: e.id - 1,
+              },
+            ],
+          },
+        },
+      },
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.initialProducts !== this.props.initialProducts) {
+      TagManager.dataLayer({
+        dataLayer: {
+          event: "productImpression",
+          ecommerce: {
+            currencyCode: this.props.USDselected
+              ? "USD"
+              : this.props.EURselected
+              ? "EUR"
+              : "JPY",
+            impressions: [
+              {
+                id: this.props.products.map((p) => p.id),
+                name: this.props.products.map((p) => p.productName),
+                price: this.props.initialProducts
+                  .map((p) => p.price)
+                  .concat(this.props.products.map((p) => p.price).slice(6)),
+                category: this.props.products.map((p) => p.category),
+                position: this.props.products.map((p, idx) => idx + 1),
+              },
+            ],
+          },
+        },
+      });
+    }
   }
 
   render() {
@@ -37,7 +85,7 @@ export class Categories extends Component {
             {this.props.initialProducts.length
               ? this.props.initialProducts[0].category[0].toUpperCase() +
                 this.props.initialProducts[0].category.slice(1)
-              : "Women"}
+              : "Loading"}
           </h2>
           <div
             className={c["products-container"]}
@@ -75,6 +123,10 @@ export const mapStateToProps = (props) => {
   return {
     initialProducts: props.initialProducts,
     flag: props.flag,
+    products: props.products,
+    USDselected: props.USDselected,
+    EURselected: props.EURselected,
+    JPYselected: props.JPYselected,
   };
 };
 

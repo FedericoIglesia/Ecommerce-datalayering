@@ -14,6 +14,7 @@ import {
 } from "./actions";
 
 import Swal from "sweetalert2";
+import TagManager from "react-gtm-module";
 
 // let a = JSON.parse(localStorage.getItem("cart"));
 
@@ -74,7 +75,6 @@ const rootReducer = (state = initialState, action) => {
       let newLength = state.qty;
       item[0]["qty"] = 1;
       newLength.push(1);
-      console.log(cart);
 
       if (cart.some((c) => c.id === id)) {
         // Swal.fire({
@@ -89,7 +89,6 @@ const rootReducer = (state = initialState, action) => {
           ...state,
         };
       } else {
-        console.log(state.cartItems);
         return {
           ...state,
           cartItems: [...state.cartItems, item].flat(),
@@ -142,11 +141,32 @@ const rootReducer = (state = initialState, action) => {
       };
 
     case SUB_QTY:
-      let subIdx = action.paylod;
       let sub1 = state.cartItems;
       if (sub1[action.payload].qty > 1) {
         sub1[action.payload].qty = sub1[action.payload].qty - 1;
       } else {
+        TagManager.dataLayer({
+          dataLayer: {
+            event: "removeFromCart",
+            ecommerce: {
+              currencyCode: state.USDselected
+                ? "USD"
+                : state.EURselected
+                ? "EUR"
+                : "JPY",
+              add: {
+                products: [
+                  {
+                    id: state.cartItems[action.payload].id,
+                    name: state.cartItems[action.payload].productName,
+                    price: state.cartItems[action.payload].price,
+                    category: state.cartItems[action.payload].category,
+                  },
+                ],
+              },
+            },
+          },
+        });
         sub1.splice(action.payload, 1);
       }
 
@@ -330,6 +350,7 @@ const rootReducer = (state = initialState, action) => {
             USDselected: true,
             JPYselected: false,
             cartItems: convertedCart,
+            conversionRate: currentRate,
           };
         } else {
           return {

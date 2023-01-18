@@ -7,6 +7,13 @@ import Overlay from "./components/overlay/Overlay";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { connect } from "react-redux";
+import TagManager from "react-gtm-module";
+
+const TagManagerArgs = {
+  gtmID: "GTM-MMBD7SG",
+};
+
+TagManager.initialize(TagManagerArgs);
 
 export class App extends React.Component {
   constructor() {

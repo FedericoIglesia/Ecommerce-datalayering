@@ -36,6 +36,7 @@ export class Currency extends Component {
 
   handleCurrency = (e) => {
     this.props.convertCurrency(e.target.value);
+    this.setState({ display: false });
   };
 
   render() {

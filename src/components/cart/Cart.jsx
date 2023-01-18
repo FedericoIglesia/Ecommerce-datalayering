@@ -9,6 +9,7 @@ import {
   addQty,
   subQty,
 } from "../../redux/actions";
+import TagManager from "react-gtm-module";
 export class Cart extends Component {
   constructor() {
     super();
@@ -20,49 +21,12 @@ export class Cart extends Component {
     };
   }
 
-  // componentDidMount() {
-  //   this.setState(() => {
-  //     return { totalPrice: +this.props.cartItems[0].price };
-  //   });
-  // }
-
-  // handleSum = (idx) => {
-  //   let newArr = [...this.state.qty];
-  //   newArr[idx] = newArr[idx] + 1;
-  //   // newArr.push(1);
-
-  //   this.setState((prev) => {
-  //     return {
-  //       qty: [...newArr],
-  //       totalPrice: prev.totalPrice + +this.props.cartItems[idx].price,
-  //     };
-  //   });
-  // };
-
   handleSum = (idx) => {
     this.props.addQty(idx);
     this.props.savePrice(
       this.props.cartItems[idx].price * this.props.cartItems[idx].qty
     );
   };
-
-  // handleSub = (idx) => {
-  //   console.log(idx);
-  //   let newArr = [...this.state.qty];
-  //   if (newArr[idx] > 1) {
-  //     newArr[idx] = newArr[idx] - 1;
-
-  //     this.setState((prev) => {
-  //       return {
-  //         qty: [...newArr],
-  //         totalPrice: prev.totalPrice - this.props.cartItems[idx].price,
-  //       };
-  //     });
-  //   } else {
-  //     this.props.savePrice(0);
-  //     this.props.removeItem(idx);
-  //   }
-  // };
 
   handleSub = (idx) => {
     this.props.subQty(idx);
@@ -71,20 +35,44 @@ export class Cart extends Component {
     );
   };
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevState.qty !== this.state.qty) {
-  //     this.props.saveQty(this.state.qty);
-  //   }
-  //   if (prevState.totalPrice !== this.state.price) {
-  //     this.props.savePrice(this.state.totalPrice);
-  //   }
-  // }
-
   componentDidUpdate(prevProps, prevState) {
     if (prevState.qty !== this.state.qty) {
       this.props.saveQty(this.state.qty);
     }
   }
+
+  handleCheckOut = () => {
+    TagManager.dataLayer({
+      dataLayer: {
+        event: "checkout",
+        ecommerce: {
+          currencyCode: this.props.USDselected
+            ? "USD"
+            : this.props.EURselected
+            ? "EUR"
+            : "JPY",
+          checkout: {
+            actionField: {
+              step: 1,
+              option:
+                location.pathname.replace("/", "")[0].toUpperCase() +
+                location.pathname.replace("/", "").slice(1) +
+                " Page",
+            },
+            products: [
+              {
+                id: this.props.cartItems.map((item) => item.id),
+                name: this.props.cartItems.map((item) => item.productName),
+                price: this.props.cartItems.map((item) => item.price),
+                category: this.props.cartItems.map((item) => item.category),
+                quantity: this.props.cartItems.map((item) => item.qty),
+              },
+            ],
+          },
+        },
+      },
+    });
+  };
 
   render() {
     return (
@@ -215,21 +203,18 @@ export class Cart extends Component {
                 ? 0
                 : this.props.USDselected
                 ? "$" +
-                  this.props.cartItems.reduce(
-                    (a, b) => a + +b.price * +b.qty,
-                    0
-                  )
+                  this.props.cartItems
+                    .reduce((a, b) => a + +b.price * +b.qty, 0)
+                    .toFixed(2)
                 : this.props.EURselected
                 ? "€" +
-                  this.props.cartItems.reduce(
-                    (a, b) => a + +b.price * +b.qty,
-                    0
-                  )
+                  this.props.cartItems
+                    .reduce((a, b) => a + +b.price * +b.qty, 0)
+                    .toFixed(2)
                 : "¥" +
-                  this.props.cartItems.reduce(
-                    (a, b) => a + +b.price * +b.qty,
-                    0
-                  )}
+                  this.props.cartItems
+                    .reduce((a, b) => a + +b.price * +b.qty, 0)
+                    .toFixed(2)}
             </span>
           </p>
           <button
@@ -241,6 +226,7 @@ export class Cart extends Component {
               width: "279px",
               height: "43px",
             }}
+            onClick={this.handleCheckOut}
           >
             ORDER
           </button>
