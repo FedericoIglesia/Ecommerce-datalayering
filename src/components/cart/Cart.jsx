@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import ca from "./Cart.module.css";
 import Nav from "../nav/Nav";
+import { US, EU, JA } from "../../App";
 import {
   removeItem,
   savePrice,
@@ -10,6 +11,7 @@ import {
   subQty,
 } from "../../redux/actions";
 import TagManager from "react-gtm-module";
+
 export class Cart extends Component {
   constructor() {
     super();
@@ -91,10 +93,12 @@ export class Cart extends Component {
                     <h3 style={{ fontWeight: "400" }}>{item.productName}</h3>
                     <h3 style={{ marginTop: "-8px" }}>
                       {this.props.USDselected
-                        ? "$" + item.price * this.props.qty[idx]
+                        ? US.format(item.price * this.props.qty[idx])
                         : this.props.EURselected
-                        ? "€" + item.price * this.props.qty[idx]
-                        : "¥" + (item.price * this.props.qty[idx]).toFixed(2)}
+                        ? EU.format(item.price * this.props.qty[idx])
+                        : JA.format(
+                            (item.price * this.props.qty[idx]).toFixed(2)
+                          )}
                     </h3>
                     <p style={{ marginTop: "-10px" }}>
                       <strong>SIZE:</strong>
@@ -172,28 +176,31 @@ export class Cart extends Component {
               {this.props.cartItems.length == 0
                 ? 0
                 : this.props.USDselected
-                ? "$" +
-                  (
-                    this.props.cartItems.reduce(
-                      (a, b) => a + +b.price * +b.qty,
-                      0
-                    ) * 0.42
-                  ).toFixed(2)
+                ? US.format(
+                    (
+                      this.props.cartItems.reduce(
+                        (a, b) => a + +b.price * +b.qty,
+                        0
+                      ) * 0.42
+                    ).toFixed(2)
+                  )
                 : this.props.EURselected
-                ? "€" +
-                  (
-                    this.props.cartItems.reduce(
-                      (a, b) => a + +b.price * +b.qty,
-                      0
-                    ) * 0.42
-                  ).toFixed(2)
-                : "¥" +
-                  (
-                    this.props.cartItems.reduce(
-                      (a, b) => a + +b.price * +b.qty,
-                      0
-                    ) * 0.42
-                  ).toFixed(2)}
+                ? EU.format(
+                    (
+                      this.props.cartItems.reduce(
+                        (a, b) => a + +b.price * +b.qty,
+                        0
+                      ) * 0.42
+                    ).toFixed(2)
+                  )
+                : JA.format(
+                    (
+                      this.props.cartItems.reduce(
+                        (a, b) => a + +b.price * +b.qty,
+                        0
+                      ) * 0.42
+                    ).toFixed(2)
+                  )}
             </span>
           </p>
           <p>
@@ -206,19 +213,25 @@ export class Cart extends Component {
               {this.props.cartItems.length == 0
                 ? 0
                 : this.props.USDselected
-                ? "$" +
-                  this.props.cartItems
-                    .reduce((a, b) => a + +b.price * +b.qty, 0)
-                    .toFixed(2)
+                ? US.format(
+                    this.props.cartItems.reduce(
+                      (a, b) => a + +b.price * +b.qty,
+                      0
+                    )
+                  )
                 : this.props.EURselected
-                ? "€" +
-                  this.props.cartItems
-                    .reduce((a, b) => a + +b.price * +b.qty, 0)
-                    .toFixed(2)
-                : "¥" +
-                  this.props.cartItems
-                    .reduce((a, b) => a + +b.price * +b.qty, 0)
-                    .toFixed(2)}
+                ? EU.format(
+                    this.props.cartItems.reduce(
+                      (a, b) => a + +b.price * +b.qty,
+                      0
+                    )
+                  )
+                : JA.format(
+                    this.props.cartItems.reduce(
+                      (a, b) => a + +b.price * +b.qty,
+                      0
+                    )
+                  )}
             </span>
           </p>
           <button

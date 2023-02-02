@@ -12,16 +12,24 @@ import {
 } from "../../redux/actions";
 import { Link } from "react-router-dom";
 import { current } from "@reduxjs/toolkit";
+
 import TagManager from "react-gtm-module";
 
 export class Categories extends Component {
   constructor() {
     super();
-
+    this.state = {
+      counts: 0,
+      hasMounted: false,
+    };
     this.handleProductDetail = this.handleProductDetail.bind(this);
   }
 
   componentDidMount() {
+    if (this.props.initialProducts.length > 0) {
+      console.log("mounted");
+      return;
+    }
     this.props.getAllProducts();
   }
 
@@ -50,7 +58,9 @@ export class Categories extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.initialProducts !== this.props.initialProducts) {
+    if (
+      prevProps.initialProducts.length !== this.props.initialProducts.length
+    ) {
       TagManager.dataLayer({
         dataLayer: {
           event: "productImpression",
@@ -75,6 +85,31 @@ export class Categories extends Component {
         },
       });
     }
+    // else if (prevProps.initialProducts[0] !== this.props.initialProducts[0]) {
+    //   TagManager.dataLayer({
+    //     dataLayer: {
+    //       event: "productImpression",
+    //       ecommerce: {
+    //         currencyCode: this.props.USDselected
+    //           ? "USD"
+    //           : this.props.EURselected
+    //           ? "EUR"
+    //           : "JPY",
+    //         impressions: [
+    //           {
+    //             id: this.props.products.map((p) => p.id),
+    //             name: this.props.products.map((p) => p.productName),
+    //             price: this.props.initialProducts
+    //               .map((p) => p.price)
+    //               .concat(this.props.products.map((p) => p.price).slice(6)),
+    //             category: this.props.products.map((p) => p.category),
+    //             position: this.props.products.map((p, idx) => idx + 1),
+    //           },
+    //         ],
+    //       },
+    //     },
+    //   });
+    // }
   }
 
   render() {

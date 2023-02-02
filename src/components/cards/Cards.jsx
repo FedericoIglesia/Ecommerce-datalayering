@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import c from "../categories/Categories.module.css";
 import { connect } from "react-redux";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { US, EU, JA } from "../../App";
 
 export class Cards extends Component {
   render() {
@@ -33,10 +34,10 @@ export class Cards extends Component {
           >
             <strong>
               {this.props.USDselected
-                ? "$" + this.props.price
+                ? US.format(this.props.price)
                 : this.props.EURselected
-                ? "€" + this.props.price
-                : "¥" + this.props.price}
+                ? EU.format(this.props.price)
+                : JA.format(this.props.price)}
             </strong>
           </p>
           {this.props.cartItems.some((i) => i.id === this.props.id) && (

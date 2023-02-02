@@ -10,10 +10,25 @@ import { connect } from "react-redux";
 import TagManager from "react-gtm-module";
 
 const TagManagerArgs = {
-  gtmID: "GTM-MMBD7SG",
+  gtmId: "GTM-MMBD7SG",
 };
 
 TagManager.initialize(TagManagerArgs);
+
+export const US = Intl.NumberFormat("en-us", {
+  currency: "USD",
+  style: "currency",
+});
+
+// Tried using Latvian locale but the Euro sign shows up after the number, not sure if that is correct
+export const EU = Intl.NumberFormat("nl-NL", {
+  currency: "EUR",
+  style: "currency",
+});
+export const JA = Intl.NumberFormat("ja-JP", {
+  currency: "JPY",
+  style: "currency",
+});
 
 export class App extends React.Component {
   constructor() {

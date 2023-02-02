@@ -3,6 +3,7 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import c from "../cart/Cart.module.css";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { US, EU, JA } from "../../App";
 import {
   removeItem,
   savePrice,
@@ -97,10 +98,12 @@ export class CartOverlay extends Component {
                     <h3 style={{ fontWeight: "400" }}>{item.productName}</h3>
                     <h3 style={{ marginTop: "-8px" }}>
                       {this.props.USDselected
-                        ? "$" + item.price * this.props.qty[idx]
+                        ? US.format(item.price * this.props.qty[idx])
                         : this.props.EURselected
-                        ? "€" + item.price * this.props.qty[idx]
-                        : "¥" + (item.price * this.props.qty[idx]).toFixed(2)}
+                        ? EU.format(item.price * this.props.qty[idx])
+                        : JA.format(
+                            (item.price * this.props.qty[idx]).toFixed(2)
+                          )}
                     </h3>
                     <p style={{ marginTop: "-10px" }}>Size:</p>
                     <div className={c["size-details"]}>
@@ -163,21 +166,24 @@ export class CartOverlay extends Component {
               <p>
                 <strong>
                   {this.props.USDselected
-                    ? "$" +
-                      this.props.cartItems.reduce(
-                        (a, b) => a + +b.price * +b.qty,
-                        0
+                    ? US.format(
+                        this.props.cartItems.reduce(
+                          (a, b) => a + +b.price * +b.qty,
+                          0
+                        )
                       )
                     : this.props.EURselected
-                    ? "€" +
-                      this.props.cartItems.reduce(
-                        (a, b) => a + +b.price * +b.qty,
-                        0
+                    ? EU.format(
+                        this.props.cartItems.reduce(
+                          (a, b) => a + +b.price * +b.qty,
+                          0
+                        )
                       )
-                    : "¥" +
-                      this.props.cartItems.reduce(
-                        (a, b) => a + +b.price * +b.qty,
-                        0
+                    : JA.format(
+                        this.props.cartItems.reduce(
+                          (a, b) => a + +b.price * +b.qty,
+                          0
+                        )
                       )}
                 </strong>
               </p>

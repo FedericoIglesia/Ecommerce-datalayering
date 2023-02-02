@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
+import { US, EU, JA } from "../../App";
 import {
   addToCart,
   getProductDetail,
@@ -30,8 +30,11 @@ export class PDP extends Component {
     }
   }
 
-  componentDidUpdate(prevState) {
-    if (prevState.storageItem !== this.state.storageItem) {
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      Object.keys(prevState.storageItem).length !==
+      Object.keys(this.state.storageItem).length
+    ) {
       TagManager.dataLayer({
         dataLayer: {
           event: "productDetail",
@@ -143,10 +146,10 @@ export class PDP extends Component {
             <p style={{ fontSize: "24px" }}>
               <strong>
                 {this.props.USDselected
-                  ? "$" + this.state.storageItem.price
+                  ? US.format(this.state.storageItem.price)
                   : this.props.EURselected
-                  ? "€" + this.state.storageItem.price
-                  : "¥" + this.state.storageItem.price}
+                  ? EU.format(this.state.storageItem.price)
+                  : JA.format(this.state.storageItem.price)}
                 {/* {this.props.initialProducts
                   ? this.props.initialProducts.find(
                       (i) => i.id == this.state.storageItem.id
